@@ -1,16 +1,38 @@
 require("@nomicfoundation/hardhat-toolbox");
+require("@nomiclabs/hardhat-etherscan");
+const dotenv = require("dotenv");
 
-// The next line is part of the sample project, you don't need it in your
-// project. It imports a Hardhat task definition, that can be used for
-// testing the frontend.
-require("./tasks/faucet");
+
+dotenv.config();
+
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: "0.8.9",
+ 
   networks: {
-    hardhat: {
-      chainId: 1337 // We set 1337 to make interacting with MetaMask simpler
-    }
+
+    schain: {
+            url: process.env.ENDPOINT_URL_SKALE,
+           
+            accounts: [process.env.PRIVATEKEY_sFUEL]
+          },
+      
+  },
+  etherscan: { 
+    apiKey: {
+      rinkeby: process.env.ETHERSCAN_API_KEY,
+      schain: process.env.ETHERSCAN_API_KEY,
+    },
+    customChains: [
+      {
+        network: "schain",
+        chainId: parseInt(process.env.chainId),
+        urls: {
+          apiURL: process.env.API_URL,
+          browserURL: process.env.BlockExplorer_URL,
+        }
+      }
+    ]
   }
 };
